@@ -1,4 +1,4 @@
-name: Deploy S3 Stack (Split Jobs)
+name: Deploy S3 Stack
 
 on:
   push:
