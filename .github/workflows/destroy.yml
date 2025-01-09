@@ -1,0 +1,35 @@
+name: Destroy CDK Application
+
+on:
+  workflow_dispatch: # Permite executar o workflow manualmente pelo GitHub Actions
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Clonar o código do repositório
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Passo 3: Instalar dependências
+      - name: Install dependencies
+        run: npm install
+
+      # Passo 4: Configurar Credenciais AWS
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Passo 5: Excluir os recursos
+      - name: Destroy CDK Stack
+        run: npx cdk destroy S3Stack --force
