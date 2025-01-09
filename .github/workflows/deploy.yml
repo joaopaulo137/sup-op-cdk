@@ -3,28 +3,23 @@ name: Deploy S3 Stack
 on:
   push:
     branches:
-      - commander # Executa o deploy quando há push na branch "main"
+      - commander
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Passo 1: Clonar o código do repositório
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Passo 2: Configurar o Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Use a versão do Node.js compatível com o CDK
+          node-version: '16'
 
-      # Passo 3: Instalar dependências
       - name: Install dependencies
         run: npm install
 
-      # Passo 4: Configurar Credenciais AWS
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -32,6 +27,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Passo 5: Sintetizar e Deploy apenas da stack S3
       - name: Deploy S3 Stack
         run: npx cdk deploy S3Stack --require-approval never
